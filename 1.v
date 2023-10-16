@@ -117,5 +117,50 @@ always (@ posedge clk2)
             default: ID_EX_type <= #2 HALT;
         endcase
     end
+//consider the EX(execute stage) implemented below
+always (@ posedge clk1)
+    if(HALTED==0)
+    begin
+        EX_MEM_type <= #2 ID_EX_type;
+        EX_MEM_IR <= #2 ID_EX_IR;
+        TAKEN_BRANCH <= #2 0;
+        case(ID_EX_type):
+        RR_ALU:begin
+            case(ID_EX_IR[31:26])
+            //perform required computation according to opcode
+                ADD: EX_MEM_ALUOut <= #2 ID_EX_A +ID_EX_B;
+                SUB: EX_MEM_ALUOut <= #2 ID_EX_A -ID_EX_B;
+                AND: EX_MEM_ALUOut <= #2 ID_EX_A &ID_EX_B;
+                OR: EX_MEM_ALUOut <= #2 ID_EX_A |ID_EX_B;
+                SLT: EX_MEM_ALUOut <= #2 ID_EX_A <ID_EX_B;
+                //here EX_MEM_ALUOut is essentially a buffer using which
+                //send data onto the memory
+                MUL:SUB: EX_MEM_ALUOut <= #2 ID_EX_A *ID_EX_B;
+                default: EX_MEM_ALUOut <= #2 32'hxxxxxxxx;//in case of no previous match store default
+            endcase
+        end
+        RM_ALU:begin
+        case(ID_EX_IR[31:26])
+            ADDI: EX_MEM_ALUOut <= #2 ID_EX_A+ ID_EX_Imm;
+            SUBI: EX_MEM_ALUOut <= #2 ID_EX_A - ID_EX_Imm;
+            SLTI: EX_MEM_ALUOut <= #2 ID_EX_A < ID_EX_Imm;
+            default: EX_MEM_ALUOut <= #2 32'hxxxxxxxx;
+        endcase
+        end
+        LOAD,STORE:begin
+            EX_MEM_ALUOut <=  #2 ID_EX_A + ID_EX_Imm;
+            EX_MEM_B <=  #2 ID_EX_B;
+            //need the destination address/ destination register
+        end
+        BRANCH: begin
+            EX_MEM_ALUOut <= #2 ID_EX_NPC + ID_EX_Imm;
+            //calculate the address to where it has to go
+            EX_MEM_cond <= #2 (ID_EX_A ==0)
+            //calculate to set or reset the flag
+        end
+        
+
+        endcase
+    end
 //let's consider the execute stage below
 endmodule
