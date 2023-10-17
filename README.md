@@ -1,7 +1,6 @@
 # MIPS Pipeline Processor
 
-This Verilog implementation represents a simplified MIPS 32-bit pipeline processor. The design is based on principles discussed in the Verilog HDL: A Guide to Digital Design and Synthesis
-, "Computer Organization" by Patterson and Hennessy, and the course "Hardware Modeling Using Verilog" by Dr. Indranil Sengupta.
+This Verilog implementation represents a simplified MIPS 32-bit pipeline processor. The design is based on principles discussed in the "Verilog HDL: A Guide to Digital Design and Synthesis" by Samir Palnitkar, "Computer Organization" by Patterson and Hennessy, and the course "Hardware Modeling Using Verilog" by Dr. Indranil Sengupta.
 
 ## Overview
 
@@ -61,7 +60,7 @@ The Verilog code is designed for simulation and testing. Proper clock edges (`po
 
 ## References
 
-1. Verilog HDL: A Guide to Digital Design and Synthesis
+1. Samir Palnitkar: "Verilog HDL: A Guide to Digital Design and Synthesis."
 2. John L. Hennessy and David A. Patterson. "Computer Organization and Design: The Hardware/Software Interface."
 3. Dr. Indranil Sengupta. "Hardware Modeling Using Verilog" [Include course details, if available].
 
