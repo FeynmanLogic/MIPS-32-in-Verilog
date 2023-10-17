@@ -162,5 +162,46 @@ always (@ posedge clk1)
 
         endcase
     end
-//let's consider the execute stage below
+//let's consider the MA(Memory access) stage below
+always (@posedge clk2)
+begin
+    if(HALTED==0)
+    begin
+        MEM_WB_type <= #2 EX_MEM_type;
+
+        //forward values from previous latch to another
+
+        MEM_WB_IR <= #2 EX_MEM_IR;
+        case (MEM_WB_type)
+        RR_ALU, RM_ALU:MEM_WB_ALUOut <= #2 EX_MEM_ALUOut;
+        //simply forward the result of the computation
+        LOAD: MEM_WB_ALUOut <= #2 Mem[EX_MEM_ALUOut];
+        //we find out the data element to be loaded, since EX_MEM_ALUOut contains
+        //the address of the data element to be loaded
+        STORE: begin
+            if(TAKEN_BRANCH ==0)
+        begin
+            MEM_WB_ALUOut <= #2 EX_MEM_B;
+            //we find out the address at which data element to be stored
+        end
+        end
+        endcase
+    end
+end
+//check the WB(Write back) stage given below
+always (@posedge clk1)
+begin
+    if(TAKEN_BRANCH ==0)
+    begin
+        case(MEM_WB_type)
+        RR_ALU: regb[MEM_WB_IR[15:11]] <= #2 MEM_WB_ALUOut;
+        //put the result of the computation in the required register
+        //according to the R type of Instruction
+        RM_ALU: regb[MEM_WB_IR[20:16]] <= #2 MEM_WB_ALUOut;
+        //same as above
+        STORE: regb[MEM_WB_IR[20:16]] <= #2 MEM_WB_LMD;
+        HALT:HALTED <= #2 1'b1;
+        endcase
+    end
+end
 endmodule
