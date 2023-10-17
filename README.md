@@ -62,7 +62,7 @@ The Verilog code is designed for simulation and testing. Proper clock edges (`po
 
 1. Samir Palnitkar: "Verilog HDL: A Guide to Digital Design and Synthesis."
 2. John L. Hennessy and David A. Patterson. "Computer Organization and Design: The Hardware/Software Interface."
-3. Dr. Indranil Sengupta. "Hardware Modeling Using Verilog" [Include course details, if available].
+3. Dr. Indranil Sengupta. "Hardware Modeling Using Verilog" (Course)
 
 ## License
 
